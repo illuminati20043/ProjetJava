@@ -6,8 +6,9 @@ public class Personnage {
     int pv;
     float defense;
     String forceAttaque;
+    int position;
 
-    public Personnage(int pv, float defense, String forceAttaque) {
+    public Personnage(int pv, float defense, String forceAttaque, int position) {
         this.pv = pv;
         this.defense = defense;
         this.forceAttaque = forceAttaque;
@@ -37,13 +38,4 @@ public class Personnage {
     public void setForceAttaque(String forceAttaque) {
         this.forceAttaque = forceAttaque;
     }
-
-
-    // Méthodes
-
-    public void attaquer(Personnage ennemi){
-
-    }
-
-    public void utiliserCapaciteSpeciale(){}
 }
