@@ -9,14 +9,14 @@ public class Attaque {
         afficherResultatAttaque(degats); // Afficher le résultat de l'attaque
 
         if (defenseur.getPv() <= 0) {
-            System.out.println("L'adversaire est KO");
+            System.out.println(defenseur.getClass() + " est KO");
         } else {
-            System.out.println("L'adversaire a encore " + defenseur.getPv() + " pv");
+            System.out.println(defenseur.getClass() + " a encore " + defenseur.getPv() + " pv");
         }
     }
 
     public static int calculerDegats(Personnage attaquant, Personnage defenseur) {
-        int forceAttaque = Integer.parseInt(attaquant.getForceAttaque());
+        int forceAttaque = attaquant.getDegatsForceAttaque();
         int defense = (int) defenseur.getDefense();
         int degats = forceAttaque - defense;
         return Math.max(degats, 0);

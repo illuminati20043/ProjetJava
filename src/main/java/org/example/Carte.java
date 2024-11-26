@@ -1,5 +1,7 @@
 package org.example;
 
+import jdk.jshell.execution.JdiInitiator;
+
 import java.util.List;
 
 public class Carte {
@@ -9,17 +11,19 @@ public class Carte {
     String lieu;
     int debut;
     int fin;
+    int difficulte;
     private List<Ennemi> ennemis;
 
     //Constructeur de la classe Carte
 
 
-    public Carte(String nom, String lieu, int fin, List<Ennemi> ennemis, int debut) {
+    public Carte(String nom, String lieu, int fin, List<Ennemi> ennemis, int debut, int difficulte) {
         this.nom = nom;
         this.lieu = lieu;
         this.fin = fin;
         this.ennemis = ennemis;
         this.debut = debut;
+        this.difficulte = difficulte;
     }
 
     //Getters et Setters
@@ -40,6 +44,9 @@ public class Carte {
     public int getDebut() {
         return debut;
     }
+    public int getDifficulte(){
+        return difficulte;
+    }
 
     public List<Ennemi> getEnnemis() {
         return ennemis;
@@ -55,6 +62,10 @@ public class Carte {
 
     public void setDebut(int debut) {
         this.debut = debut;
+    }
+
+    public void setDifficulte(int difficulte){
+        this.difficulte = difficulte;
     }
 
     public void setFin(int fin) {

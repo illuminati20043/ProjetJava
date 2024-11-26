@@ -5,8 +5,8 @@ public class Ennemi extends Personnage{
 
     private TypeEnnemi type;
 
-    public Ennemi(TypeEnnemi type, int position){
-        super(type.getPv(), type.getDefense(), type.getForceAttaque(), position);
+    public Ennemi(TypeEnnemi type, int position,int degatsForceAttaque){
+        super(type.getPv(), type.getDefense(), type.getForceAttaque(), position, degatsForceAttaque);
         this.type = type;
 
     }
