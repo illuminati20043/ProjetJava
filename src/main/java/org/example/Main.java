@@ -1,4 +1,5 @@
 package org.example;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -6,37 +7,35 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-
-
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-
         try {
+            // Configuration du logger
             FileHandler fh = new FileHandler("game.log", true); // true for append mode
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
-            System.out.println("Bienvenue sur le projet de Adam GUIZAOUI et Elyes AÏSSAT");
 
-            //Initialisation du jeu
+            System.out.println("\nBienvenue sur le projet de Adam GUIZAOUI et Elyes AÏSSAT");
+
+            // Initialisation du jeu
             Jeu jeu = new Jeu();
             logger.info("Jeu initialisé");
 
-            //Selection du personnage
+            // Sélection du personnage
             Hero hero = jeu.selectionHero();
             logger.info("Joueur choisi");
 
-            //Selection de la carte
+            // Sélection de la carte
             Carte carte = jeu.selectionCarte();
             logger.info("Carte choisie");
             jeu.genererEnnemis(carte);
             logger.info("Ennemis générés");
 
-            //lecture des données entrées pas l'utilisateur
+            // Lecture des données entrées par l'utilisateur
             Scanner scanner = new Scanner(System.in);
-
 
             // BOUCLE DU JEU
             boolean enJeu = true;
@@ -46,41 +45,59 @@ public class Main {
                 System.out.println("1. Combattre un ennemi");
                 System.out.println("2. Quitter le jeu");
 
-                int choix = scanner.nextInt();
+                // Vérification de l'entrée de l'utilisateur pour éviter les erreurs
+                int choix = -1;
+                while (choix < 1 || choix > 2) {
+                    System.out.print("Entrez votre choix (1 ou 2) : ");
+                    if (scanner.hasNextInt()) {
+                        choix = scanner.nextInt();
+                    } else {
+                        scanner.next(); // Consomme la mauvaise entrée
+                    }
+                }
+
                 switch (choix) {
                     case 1:
-                        Ennemi ennemi = carte.getEnnemis().removeFirst();
+                        // Combat contre un ennemi
+                        Ennemi ennemi = carte.getEnnemis().removeFirst(); // Le premier ennemi est retiré
                         System.out.println("Vous affrontez un " + ennemi.getType());
-                        logger.info("Combat commencé contre un ennemi de type "+ennemi.getType());
+                        logger.info("Combat commencé contre un ennemi de type " + ennemi.getType());
                         jeu.lancerCombat(hero, ennemi);
+
+                        // Vérification de l'état du héros après le combat
                         if (hero.getPv() <= 0) {
                             enJeu = false;
                             System.out.println("Game Over");
-                            logger.info("Defeat");
+                            logger.info("Défaite du joueur");
                         } else if (carte.getEnnemis().isEmpty()) {
+                            // Si tous les ennemis ont été éliminés
                             System.out.println("Vous avez terminé la carte !");
-                            logger.info("Victory");
+                            logger.info("Victoire, tous les ennemis sont vaincus");
                             enJeu = false;
                         }
-                        logger.info("Ennemis restants : "+ carte.getEnnemis().size());
+
+                        logger.info("Ennemis restants : " + carte.getEnnemis().size());
                         break;
+
                     case 2:
+                        // Quitter le jeu
                         enJeu = false;
                         System.out.println("Vous avez quitté le jeu! Merci pour y avoir joué");
                         logger.info("Jeu quitté");
                         break;
+
                     default:
+                        // Si le choix est invalide
                         System.out.print("Choix invalide");
                         logger.warning("Choix invalide");
                 }
             }
 
-            // fermer le scanner
+            // Fermeture du scanner
             scanner.close();
-        }
-        catch(Exception e) {
-            logger.severe("Erreur: "+e.getMessage());
-
+        } catch (Exception e) {
+            logger.severe("Erreur: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
