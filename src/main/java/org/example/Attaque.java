@@ -9,6 +9,7 @@ public class Attaque {
         afficherResultatAttaque(degats); // Afficher le résultat de l'attaque
 
         if (defenseur.getPv() <= 0) {
+            defenseur.setPv(0);
             System.out.println(defenseur.getClass() + " est KO");
         } else {
             System.out.println(defenseur.getClass() + " a encore " + defenseur.getPv() + " pv");

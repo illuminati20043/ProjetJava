@@ -1,0 +1,34 @@
+Nov 29, 2024 3:20:09 PM org.example.Main main
+INFO: Jeu initialisé
+Nov 29, 2024 3:20:25 PM org.example.Main main
+INFO: Joueur choisi
+Nov 29, 2024 3:20:27 PM org.example.Main main
+INFO: Carte choisie
+Nov 29, 2024 3:20:27 PM org.example.Main main
+INFO: Ennemis générés
+Nov 29, 2024 3:20:28 PM org.example.Main main
+INFO: Combat commencé contre un ennemi de type CATCHER
+Nov 29, 2024 3:20:28 PM org.example.Main main
+INFO: Ennemis restants : 8
+Nov 29, 2024 3:20:31 PM org.example.Main main
+INFO: Combat commencé contre un ennemi de type GANGSTER
+Nov 29, 2024 3:20:31 PM org.example.Main main
+INFO: Ennemis restants : 7
+Nov 29, 2024 3:20:32 PM org.example.Main main
+INFO: Combat commencé contre un ennemi de type CATCHER
+Nov 29, 2024 3:20:32 PM org.example.Main main
+INFO: Ennemis restants : 6
+Nov 29, 2024 3:20:33 PM org.example.Main main
+INFO: Combat commencé contre un ennemi de type BRIGAND
+Nov 29, 2024 3:20:33 PM org.example.Main main
+INFO: Ennemis restants : 5
+Nov 29, 2024 3:20:34 PM org.example.Main main
+INFO: Combat commencé contre un ennemi de type GANGSTER
+Nov 29, 2024 3:20:34 PM org.example.Main main
+INFO: Ennemis restants : 4
+Nov 29, 2024 3:20:35 PM org.example.Main main
+INFO: Combat commencé contre un ennemi de type GANGSTER
+Nov 29, 2024 3:20:35 PM org.example.Main main
+INFO: Ennemis restants : 3
+Dec 03, 2024 9:28:32 AM org.example.Main main
+INFO: Jeu initialisé
