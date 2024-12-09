@@ -10,6 +10,7 @@ public class Jeu {
 
     private static final Logger logger = Logger.getLogger(Jeu.class.getName());
     private List<Carte> cartesDisponibles;
+    public boolean pouvoirDisponible;
 
     public Jeu() {
         cartesDisponibles = new ArrayList<>();
@@ -18,6 +19,7 @@ public class Jeu {
         cartesDisponibles.add(new Carte("Paris - Champs-Élysées", "Paris", 15, new ArrayList<>(), 0, 2));
         cartesDisponibles.add(new Carte("Londres - Piccadilly Circus", "Londres", 18, new ArrayList<>(), 0, 3));
         cartesDisponibles.add(new Carte("Shanghai - The Bund", "Shanghai", 25, new ArrayList<>(), 0, 5));
+        pouvoirDisponible = true;
         logger.info("Cartes disponibles initialisées");
     }
 
@@ -83,6 +85,38 @@ public class Jeu {
             ennemis.add(new Ennemi(typeAleatoire, i, 30)); // Exemple : position i, dégâts 30
         }
         carte.setEnnemis(ennemis);
+    }
+
+    public void choixPouvoir(Personnage personnage, Carte carte) {
+        if (!pouvoirDisponible) {
+            System.out.println("Pouvoir spécial déjà utilisé !");
+            return;
+        }
+
+        String _pouvoirSpecial = personnage.getForceAttaque();
+        switch (_pouvoirSpecial) {
+            case "Regénération":
+                int ajout = personnage.getPv() + 40;
+                personnage.setPv(ajout);
+                break;
+            case "Demacian Justice":
+                int nouveauxDegats = personnage.getDegatsForceAttaque() + 20; // Augmente les dégâts de 20
+                personnage.setDegatsForceAttaque(nouveauxDegats);
+                break;
+            case "Karthus Ult":
+                List<Ennemi> ennemis = carte.getEnnemis(); // Utilisation de la carte sélectionnée
+                for (Ennemi ennemi : ennemis) {
+                    int pvRestants = ennemi.getPv() - 20; // Inflige 20 dégâts à chaque ennemi
+                    ennemi.setPv(pvRestants);
+                }
+                break;
+            default:
+                logger.warning("Pouvoir spécial inconnu : " + _pouvoirSpecial);
+                break;
+        }
+
+        pouvoirDisponible = false; // Met à jour la disponibilité du pouvoir
+        logger.info("Pouvoir spécial utilisé : " + _pouvoirSpecial);
     }
 
     public void lancerCombat(Personnage attaquant, Personnage defenseur) {

@@ -2,9 +2,9 @@ package org.example;
 
 public enum TypeHero {
     
-        Tank(200,20,"Bouclier"),
-        Damage(100,10,"Epee"),
-        Archer(80,5,"Arc");
+        Tank(200,20,"Regénération"),
+        Damage(100,10,"Demacian Justice"),
+        Archer(80,5,"Karthus Ult");
         private final int pv;
         private final float defense;
         private final String forceAttaque;

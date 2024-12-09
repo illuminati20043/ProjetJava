@@ -78,3 +78,11 @@ Dec 09, 2024 12:19:28 AM org.example.Main main
 INFO: Victoire, tous les ennemis sont vaincus
 Dec 09, 2024 12:19:28 AM org.example.Main main
 INFO: Ennemis restants : 0
+Dec 09, 2024 3:17:33 PM org.example.Main main
+INFO: Jeu initialisé
+Dec 09, 2024 3:17:37 PM org.example.Main main
+INFO: Joueur choisi
+Dec 09, 2024 3:17:40 PM org.example.Main main
+INFO: Carte choisie
+Dec 09, 2024 3:17:40 PM org.example.Main main
+INFO: Ennemis générés

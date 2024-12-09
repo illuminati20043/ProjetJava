@@ -43,12 +43,13 @@ public class Main {
 
                 System.out.println("\nChoisir une action");
                 System.out.println("1. Combattre un ennemi");
-                System.out.println("2. Quitter le jeu");
+                System.out.println("2. Utiliser pouvoir spécial");
+                System.out.println("3. Quitter le jeu");
 
                 // Vérification de l'entrée de l'utilisateur pour éviter les erreurs
                 int choix = -1;
                 while (choix < 1 || choix > 2) {
-                    System.out.print("Entrez votre choix (1 ou 2) : ");
+                    System.out.print("Entrez votre choix : ");
                     if (scanner.hasNextInt()) {
                         choix = scanner.nextInt();
                     } else {
@@ -78,8 +79,10 @@ public class Main {
 
                         logger.info("Ennemis restants : " + carte.getEnnemis().size());
                         break;
-
-                    case 2:
+                    case 2 :
+                        jeu.choixPouvoir(hero, carte);
+                        break;
+                    case 3:
                         // Quitter le jeu
                         enJeu = false;
                         System.out.println("Vous avez quitté le jeu! Merci pour y avoir joué");
