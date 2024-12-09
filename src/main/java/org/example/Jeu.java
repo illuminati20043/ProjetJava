@@ -1,26 +1,89 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Jeu {
 
     private static final Logger logger = Logger.getLogger(Jeu.class.getName());
-    private List<Carte> cartesDisponibles;
-    public boolean pouvoirDisponible;
+    private CarteGraphique carteGraphique;
+    private Hero hero;
 
     public Jeu() {
-        cartesDisponibles = new ArrayList<>();
-        cartesDisponibles.add(new Carte("New York - Times Square", "New York", 10, new ArrayList<>(), 0, 3));
-        cartesDisponibles.add(new Carte("Tokyo - Shibuya Crossing", "Tokyo", 20, new ArrayList<>(), 0, 4));
-        cartesDisponibles.add(new Carte("Paris - Champs-Élysées", "Paris", 15, new ArrayList<>(), 0, 2));
-        cartesDisponibles.add(new Carte("Londres - Piccadilly Circus", "Londres", 18, new ArrayList<>(), 0, 3));
-        cartesDisponibles.add(new Carte("Shanghai - The Bund", "Shanghai", 25, new ArrayList<>(), 0, 5));
-        pouvoirDisponible = true;
-        logger.info("Cartes disponibles initialisées");
+        hero = selectionHero();
+        carteGraphique = new CarteGraphique(5, hero); // Initialiser avec 5 ennemis et le héros
+        logger.info("Jeu initialisé avec une carte graphique");
+    }
+
+    public void demarrer() {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean enJeu = true;
+        while (enJeu && hero.getPv() > 0) {
+            carteGraphique.afficherCarte();
+            System.out.print("Déplacez-vous (w/a/s/d) : ");
+            char direction = scanner.next().charAt(0);
+
+            carteGraphique.deplacerJoueur(direction);
+            // Vérifier les interactions avec les ennemis
+            Ennemi ennemiProche = ennemiAdjacent();
+            if (ennemiProche != null) {
+                System.out.println("Vous avez rencontré un ennemi !");
+                logger.info("Ennemi proche détecté");
+
+                System.out.println("Choisissez une action :");
+                System.out.println("1. Attaquer l'ennemi");
+                System.out.println("2. Utiliser pouvoir spécial");
+
+                int choix = -1;
+                while (choix < 1 || choix > 2) {
+                    System.out.print("Entrez votre choix (1-2) : ");
+                    if (scanner.hasNextInt()) {
+                        choix = scanner.nextInt();
+                    } else {
+                        scanner.next(); // Consomme la mauvaise entrée
+                    }
+                }
+
+                switch (choix) {
+                    case 1 -> {
+                        lancerCombat(hero, ennemiProche);
+                        logger.info("Combat lancé contre l'ennemi");
+                    }
+                    case 2 -> {
+                        choixPouvoir(hero, carteGraphique);
+                        logger.info("Pouvoir spécial utilisé");
+                    }
+                }
+
+                // Vérification de l'état du héros après le combat
+                if (hero.getPv() <= 0) {
+                    enJeu = false;
+                    System.out.println("Game Over");
+                    logger.info("Défaite du joueur");
+                } else if (carteGraphique.getEnnemis().isEmpty()) {
+                    // Si tous les ennemis ont été éliminés
+                    System.out.println("Vous avez terminé la carte !");
+                    logger.info("Victoire, tous les ennemis sont vaincus");
+                    enJeu = false;
+                }
+
+                logger.info("Ennemis restants : " + carteGraphique.getEnnemis().size());
+            }
+        }
+        scanner.close();
+    }
+
+    private Ennemi ennemiAdjacent() {
+        int x = hero.getPositionX();
+        int y = hero.getPositionY();
+        for (Ennemi ennemi : carteGraphique.getEnnemis()) {
+            if ((ennemi.getPositionX() == x && Math.abs(ennemi.getPositionY() - y) == 1) ||
+                    (ennemi.getPositionY() == y && Math.abs(ennemi.getPositionX() - x) == 1)) {
+                return ennemi;
+            }
+        }
+        return null;
     }
 
     public Hero selectionHero() {
@@ -55,70 +118,6 @@ public class Jeu {
         return new Hero(0, typeHero, 50);
     }
 
-    public Carte selectionCarte() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choisissez votre carte : ");
-        for (int i = 0; i < cartesDisponibles.size(); i++) {
-            Carte carte = cartesDisponibles.get(i);
-            System.out.println((i + 1) + " : " + carte.getNom() + " (" + carte.getLieu() + ")");
-        }
-
-        int choix = -1;
-        while (choix < 1 || choix > cartesDisponibles.size()) {
-            System.out.print("Entrez votre choix de carte : ");
-            choix = scanner.nextInt();
-        }
-
-        Carte carteChoisie = cartesDisponibles.get(choix - 1);
-        logger.info("Carte choisie : " + carteChoisie.getNom());
-        return carteChoisie;
-    }
-
-    public void genererEnnemis(Carte carte) {
-        int nombreEnnemis = carte.getDifficulte() * 3;
-        List<Ennemi> ennemis = new ArrayList<>();
-        Random random = new Random();
-        TypeEnnemi[] typesEnnemis = TypeEnnemi.values();
-
-        for (int i = 0; i < nombreEnnemis; i++) {
-            TypeEnnemi typeAleatoire = typesEnnemis[random.nextInt(typesEnnemis.length)];
-            ennemis.add(new Ennemi(typeAleatoire, i, 30)); // Exemple : position i, dégâts 30
-        }
-        carte.setEnnemis(ennemis);
-    }
-
-    public void choixPouvoir(Personnage personnage, Carte carte) {
-        if (!pouvoirDisponible) {
-            System.out.println("Pouvoir spécial déjà utilisé !");
-            return;
-        }
-
-        String _pouvoirSpecial = personnage.getForceAttaque();
-        switch (_pouvoirSpecial) {
-            case "Regénération":
-                int ajout = personnage.getPv() + 40;
-                personnage.setPv(ajout);
-                break;
-            case "Demacian Justice":
-                int nouveauxDegats = personnage.getDegatsForceAttaque() + 20; // Augmente les dégâts de 20
-                personnage.setDegatsForceAttaque(nouveauxDegats);
-                break;
-            case "Karthus Ult":
-                List<Ennemi> ennemis = carte.getEnnemis(); // Utilisation de la carte sélectionnée
-                for (Ennemi ennemi : ennemis) {
-                    int pvRestants = ennemi.getPv() - 20; // Inflige 20 dégâts à chaque ennemi
-                    ennemi.setPv(pvRestants);
-                }
-                break;
-            default:
-                logger.warning("Pouvoir spécial inconnu : " + _pouvoirSpecial);
-                break;
-        }
-
-        pouvoirDisponible = false; // Met à jour la disponibilité du pouvoir
-        logger.info("Pouvoir spécial utilisé : " + _pouvoirSpecial);
-    }
-
     public void lancerCombat(Personnage attaquant, Personnage defenseur) {
         while (attaquant.getPv() > 0 && defenseur.getPv() > 0) {
             Attaque.lancerAttaque(attaquant, defenseur);
@@ -134,9 +133,22 @@ public class Jeu {
             System.out.println(defenseur.getClass().getSimpleName() + " a été vaincu !");
             if (defenseur instanceof Ennemi ennemi) {
                 ennemi.marquerVaincu();
+                carteGraphique.retirerEnnemi(ennemi); // Retirer l'ennemi de la carte
             }
         } else {
             System.out.println(attaquant.getClass().getSimpleName() + " a été vaincu !");
         }
+    }
+
+    public void choixPouvoir(Hero hero, CarteGraphique carteGraphique) {
+        // Implémentation de l'utilisation du pouvoir spécial
+        // Exemple : régénération, augmentation des dégâts, etc.
+        System.out.println("Pouvoir spécial utilisé !");
+        logger.info("Pouvoir spécial utilisé");
+    }
+
+    public static void main(String[] args) {
+        Jeu jeu = new Jeu();
+        jeu.demarrer();
     }
 }
